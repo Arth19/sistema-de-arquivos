@@ -14,7 +14,7 @@ class FileSystem:
         if directory and not any(f.name == file_name for f in directory.files):
             file = File(file_name, size, self.block_size, self.blocks_pool)
             directory.add_file(file)
-            return f"File '{file_name}' created in '{directory_name}' directory."
+            return f"File '{file_name}' created in '{directory_name}' directory. {self.check_fragmentation()}"
         else:
             return "File already exists or directory not found."
 
@@ -26,7 +26,7 @@ class FileSystem:
                 for block in file_to_delete.blocks:
                     self.blocks_pool.append(block)
                 directory.remove_file(file_name)
-                return f"File '{file_name}' deleted from '{directory_name}' directory."
+                return f"File '{file_name}' deleted from '{directory_name}' directory. {self.check_fragmentation()}"
             else:
                 return "File not found."
         else:
@@ -35,7 +35,7 @@ class FileSystem:
     def list_files(self, directory_name):
         directory = self.get_directory(directory_name)
         if directory:
-            return directory.list_files()
+            return '\n'.join(str(file) for file in directory.files)
         else:
             return "Directory not found."
 

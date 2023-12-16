@@ -18,3 +18,7 @@ class File:
                     allocated_blocks[-2].next_block = block
 
         return allocated_blocks
+
+    def __str__(self):
+        blocks_info = ", ".join(f"Block(ID: {b.block_id})" for b in self.blocks)
+        return f"File(Name: {self.name}, Size: {self.size}, Blocks: [{blocks_info}])"
