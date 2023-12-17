@@ -34,7 +34,7 @@ class SistemaArquivos:
 
                 return f"'{nome_arquivo}' foi criado em '/{nome_diretorio}'. {self.verifica_fragmentacao()}\n"
             else:
-                return f"'{nome_arquivo}' não encontrado.\n"
+                return f"'{nome_arquivo}' já existe em '/{nome_diretorio}'.\n"
         else:
             return f"'/{nome_diretorio}' não encontrado.\n"
 
@@ -59,7 +59,7 @@ class SistemaArquivos:
 
                 return f"'{nome_arquivo}' foi removido de '/{nome_diretorio}'. {self.verifica_fragmentacao()}\n"
             else:
-                return f"'{nome_arquivo}' não encontrado.\n"
+                return f"'{nome_arquivo}' não foi encontrado em '/{nome_diretorio}'.\n"
         else:
             return f"'/{nome_diretorio}' não encontrado.\n"
 
@@ -76,7 +76,7 @@ class SistemaArquivos:
 
     def verifica_fragmentacao(self) -> str:
         tem_fragmentacao = any(
-            bloco.prox_bloco is not None and bloco.prox_bloco.id_bloco != bloco.id + 1
+            bloco.prox_bloco is not None and bloco.prox_bloco.id != bloco.id + 1
             for bloco in self.memoria
         )
 
@@ -92,9 +92,9 @@ class SistemaArquivos:
     def remove_diretorio(self, nome_diretorio: str) -> str:
         if nome_diretorio != "root":
             if nome_diretorio in self.diretorios:
-                directory = self.diretorios.pop(nome_diretorio)
+                diretorio = self.diretorios.pop(nome_diretorio)
 
-                for arquivo in directory.arquivos:
+                for arquivo in diretorio.arquivos:
                     for bloco in arquivo.blocos:
                         self.memoria.append(bloco)
 
