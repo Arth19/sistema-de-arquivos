@@ -1,58 +1,73 @@
-from core.file_system import FileSystem
+# UFRPE - Universidade Federal Rural de Pernambuco
+# Sistemas Operacionais - 2023.1
+#
+# 2VA - Sistema de Arquivos
+# Aluno(s): Aildson Ferreira e Arthur Macedo
 
-def print_commands():
-    commands = """
+
+from core.sistema_arquivos import SistemaArquivos
+
+
+def lista_comandos():
+    comandos = """
     Comandos Disponíveis:
-    - create_file [dir] [name] [size]: Cria um arquivo
-    - delete_file [dir] [name]: Exclui um arquivo
-    - list_files [dir]: Lista arquivos em um diretório
-    - create_dir [name]: Cria um diretório
-    - delete_dir [name]: Exclui um diretório
-    - list_dirs: Lista todos os diretórios
-    - exit: Sai do programa
+        > create_file <dir> <nome> <tamanho>    Cria um arquivo
+        > remove_file <dir> <nome>              Exclui um arquivo
+        > list_files  <dir>                     Lista arquivos em um diretório
+        > create_dir <nome>                     Cria um diretório
+        > remove_dir <nome>                     Exclui um diretório
+        > list_dirs                             Lista todos os diretórios
+        > exit                                  Sai do programa
     """
-    print(commands)
+    print(comandos)
+
 
 def main():
-    fs = FileSystem(100, 1024)  # Inicializar o sistema de arquivos
-    print("Bem-vindo ao Simulador de Sistema de Arquivos!")
-    print_commands()
+    fs = SistemaArquivos(100, 1024)  # Inicializar o sistema de arquivos
+    print("### Sistema de Arquivos ###")
+    lista_comandos()
 
     while True:
-        command = input("Digite um comando: ").strip().split()
-        if not command:
+        comando = input("Digite um comando: ").strip().split()
+
+        if not comando:
             continue
 
-        if command[0] == "create_file" and len(command) == 4:
-            dir_name, file_name, size = command[1], command[2], int(command[3])
-            print(fs.create_file(dir_name, file_name, size))
+        if comando[0] == "create_file" and len(comando) == 4:
+            nome_diretorio, nome_arquivo, tamanho = (
+                comando[1],
+                comando[2],
+                int(comando[3]),
+            )
+            print(fs.cria_arquivo(nome_diretorio, nome_arquivo, tamanho))
 
-        elif command[0] == "delete_file" and len(command) == 3:
-            dir_name, file_name = command[1], command[2]
-            print(fs.delete_file(dir_name, file_name))
+        elif comando[0] == "remove_file" and len(comando) == 3:
+            nome_diretorio, nome_arquivo = comando[1], comando[2]
+            print(fs.remove_arquivo(nome_diretorio, nome_arquivo))
 
-        elif command[0] == "list_files" and len(command) == 2:
-            dir_name = command[1]
-            print("Files:", fs.list_files(dir_name))
+        elif comando[0] == "list_files" and len(comando) == 2:
+            nome_diretorio = comando[1]
+            print("Arquivos:", fs.lista_arquivos(nome_diretorio))
 
-        elif command[0] == "create_dir" and len(command) == 2:
-            dir_name = command[1]
-            print(fs.create_directory(dir_name))
+        elif comando[0] == "create_dir" and len(comando) == 2:
+            nome_diretorio = comando[1]
+            print(fs.cria_diretorio(nome_diretorio))
 
-        elif command[0] == "delete_dir" and len(command) == 2:
-            dir_name = command[1]
-            print(fs.delete_directory(dir_name))
+        elif comando[0] == "remove_dir" and len(comando) == 2:
+            nome_diretorio = comando[1]
+            print(fs.remove_diretorio(nome_diretorio))
 
-        elif command[0] == "list_dirs":
-            print("Directories:", fs.list_directories())
+        elif comando[0] == "list_dirs":
+            print("Diretórios:", fs.lista_diretorios())
 
-        elif command[0] == "exit":
-            print("Saindo do simulador...")
+        elif comando[0] == "exit":
+            print("Encerrando...")
             break
 
         else:
             print("Comando inválido.")
-            print_commands()
+            lista_comandos()
+
 
 if __name__ == "__main__":
     main()
