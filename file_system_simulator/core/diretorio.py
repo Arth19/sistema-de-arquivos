@@ -10,8 +10,9 @@ from .arquivo import Arquivo
 class Diretorio:
     # Os diretórios possuem nome e lista de arquivos
     # É possível adicionar, remover e listar os arquivos de cada diretório
-    def __init__(self, nome: str):
+    def __init__(self, nome: str, senha: str):
         self.nome = nome
+        self.senha = senha
         self.arquivos: list[Arquivo] = []
 
     def adiciona_arquivo(self, arquivo: Arquivo):

@@ -4,6 +4,7 @@
 # 2VA - Sistema de Arquivos
 # Aluno(s): Aildson Ferreira e Arthur Macedo
 
+from .criptografia import codifica, descodifica
 from .arquivo import Arquivo
 from .diretorio import Diretorio
 from .bloco import Bloco
@@ -16,7 +17,7 @@ class SistemaArquivos:
     def __init__(self, qtd_blocos: int, tam_bloco: int):
         self.tam_bloco = tam_bloco
         self.memoria = [Bloco(tam_bloco, i) for i in range(qtd_blocos)]
-        self.root_dir = Diretorio("root")
+        self.root_dir = Diretorio("root", "root")
         self.diretorios = {"root": self.root_dir}
 
     def cria_arquivo(
@@ -63,11 +64,15 @@ class SistemaArquivos:
         else:
             return f"'/{nome_diretorio}' não encontrado.\n"
 
-    def lista_arquivos(self, nome_diretorio: str) -> str:
+    def lista_arquivos(self, nome_diretorio: str, senha: str) -> str:
         diretorio = self.encontra_diretorio(nome_diretorio)
 
         if diretorio:
-            return "\n".join(str(arquivo) for arquivo in diretorio.arquivos)
+            senha_diretorio_descodificada = descodifica(diretorio.senha)
+            if senha == senha_diretorio_descodificada:
+                return "\n".join(str(arquivo) for arquivo in diretorio.arquivos)
+            else:
+                return "Senha incorreta"
         else:
             return f"'/{nome_diretorio}' não encontrado.\n"
 
@@ -82,9 +87,12 @@ class SistemaArquivos:
 
         return "Com Fragmentação" if tem_fragmentacao else "Sem Fragmentação"
 
-    def cria_diretorio(self, nome_diretorio: str) -> str:
+    def cria_diretorio(self, nome_diretorio: str, senha: str) -> str:
         if nome_diretorio not in self.diretorios:
-            self.diretorios[nome_diretorio] = Diretorio(nome_diretorio)
+            senha_codificada = codifica(senha)
+            self.diretorios[nome_diretorio] = Diretorio(
+                nome_diretorio, senha_codificada
+            )
             return f"'/{nome_diretorio}' criado.\n"
         else:
             return f"'/{nome_diretorio}' já existe.\n"
